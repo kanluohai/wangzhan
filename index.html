@@ -3,97 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>忘风 Joy 个人主页</title>
+    <title>忘风 joy | Personal Home</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background 0.5s ease, color 0.5s ease;
         }
         html {
             scroll-behavior: smooth;
         }
+        /* 开局浅灰色底色 */
         body {
-            background-color: #000;
-            background-image: url("");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #ffffff;
-            font-family: sans-serif;
+            font-family: "Microsoft Yahei", sans-serif;
+            background: #f8f9fa;
+            color: #222;
         }
-        .nav-box {
+        body.dark {
+            background: #1a1a2e;
+            color: #eeeeee;
+        }
+
+        /* 毛玻璃导航 + 恢复原生顶部下落动画 */
+        .nav-glass {
             position: fixed;
-            top: 30px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
-            backdrop-filter: blur(12px);
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 999px;
-            padding: 10px 30px;
-            z-index: 999;
+            backdrop-filter: blur(18px);
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border-radius: 50px;
+            padding: 12px 30px;
+            z-index: 9999;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            white-space: nowrap;
+            animation: navDrop 1.2s ease-out;
         }
-        .nav-box a {
-            color: #fff;
+        @keyframes navDrop {
+            from { top: -100px; opacity: 0; }
+            to { top: 25px; opacity: 1; }
+        }
+        body.dark .nav-glass {
+            background: rgba(80, 80, 120, 0.25);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .nav-glass a {
+            color: inherit;
             text-decoration: none;
-            margin: 0 12px;
-            padding: 5px 10px;
-            transition: 0.3s;
+            padding: 6px 12px;
+            border-radius: 10px;
+            transition: all 0.4s ease;
+            font-size: 15px;
+            letter-spacing: 1px;
         }
-        .nav-box a.active {
-            border: 1px solid #fff;
-            border-radius: 6px;
+        .nav-glass a.active {
+            background: rgba(0,0,0,0.05);
         }
-        .big-title {
-            background: linear-gradient(90deg,#ffffff,#87bfff);
+        body.dark .nav-glass a.active {
+            background: rgba(255,255,255,0.08);
+        }
+        .switch-btn {
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid #888;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        /* 渐变艺术字体 永久保留 */
+        .lux-title {
+            background: linear-gradient(120deg, #409eff, #a855f7);
             -webkit-background-clip: text;
+            background-clip: text;
             color: transparent;
         }
-        .wrap {
-            animation: upAnim 1.5s ease-out;
-        }
-        @keyframes upAnim {
-            from {opacity: 0;transform: translateY(40px);}
-            to {opacity: 1;transform: translateY(0);}
-        }
-        section {
+
+        /* 恢复文字板块左侧滑入全套入场动画 */
+        .fade-lux {
+            opacity: 0;
+            animation: textLeftIn 1.5s ease-out forwards;
+            width: 100%;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+        }
+        @keyframes textLeftIn {
+            from { transform: translateX(-80px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .desc-text {
+            margin-top: 18px;
+            font-size: 19px;
+            letter-spacing: 2px;
+            color: #555;
+        }
+        body.dark .desc-text {
+            color: #b0c4de;
+        }
+        .wechat-text {
+            margin-top: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .lux-btn {
+            display: inline-block;
+            margin: 12px 8px;
+            padding: 10px 28px;
+            border: 1px solid #aaa;
+            border-radius: 12px;
+            color: inherit;
+            text-decoration: none;
+            font-size: 17px;
+            transition: all 0.4s ease;
+        }
+        .lux-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(64,158,255,0.2);
+        }
+
+        .en { display: none; }
+        .zh { display: block; }
+
+        /* 回到顶部原版样式动画 */
+        .back-top {
+            position: fixed;
+            right: 30px;
+            bottom: 40px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #409eff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.4s;
+            z-index: 999;
+        }
+        .back-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        footer {
             text-align: center;
+            padding: 30px 0;
+            font-size: 16px;
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <div class="nav-box">
-        <a href="#home" class="active">首页</a>
-        <a href="#digital">数码分享</a>
-        <a href="#python">Python代码</a>
-        <a href="#dy">抖音主页</a>
-    </div>
+<!-- 无任何音乐相关代码、图标，彻底清空 -->
 
-    <section id="home" class="wrap">
-        <h1 class="big-title" style="font-size:70px;font-weight:bold;">忘风 Joy</h1>
-        <p style="margin-top:20px;font-size:20px;color:#ccc;">数码干货 · Python 开源创作</p>
-    </section>
+<!-- 原版毛玻璃导航 自带下落动画 -->
+<div class="nav-glass">
+    <a href="#home" class="active"><span class="zh">首页</span><span class="en">Home</span></a>
+    <a href="#works"><span class="zh">创作专区</span><span class="en">Works</span></a>
+    <a href="#service"><span class="zh">淘机服务</span><span class="en">Device Service</span></a>
+    <a href="#douyin"><span class="zh">抖音</span><span class="en">Douyin</span></a>
+    <a href="#github"><span class="zh">GitHub</span><span class="en">GitHub</span></a>
+    <a href="#netdisk"><span class="zh">网盘</span><span class="en">NetDisk</span></a>
+    <a href="#contact"><span class="zh">联系客服</span><span class="en">Contact</span></a>
+    <button class="switch-btn" id="langBtn">EN</button>
+    <button class="switch-btn" id="themeBtn">☀️</button>
+</div>
 
-    <section id="digital" class="wrap">
-        <h2 class="big-title" style="font-size:40px;margin-bottom:15px;">数码分享</h2>
-        <p style="font-size:18px;color:#bbb;">手机、电脑低配设备优化 实用数码技巧</p>
-    </section>
+<section id="home" class="fade-lux">
+    <h1 class="lux-title" style="font-size:75px;">忘风 joy</h1>
+    <p class="desc-text zh">数码深度优化 · Python 开源原创项目</p>
+    <p class="desc-text en">Digital Tech · Python Open Source</p>
+</section>
 
-    <section id="python" class="wrap">
-        <h2 class="big-title" style="font-size:40px;margin-bottom:15px;">Python 代码分享</h2>
-        <p style="font-size:18px;color:#bbb;">零基础趣味编程、免费开源小脚本</p>
-    </section>
+<section id="works" class="fade-lux">
+    <h2 class="lux-title" style="font-size:45px;"><span class="zh">原创创作合集</span><span class="en">Original Creations</span></h2>
+    <p class="desc-text zh">低配硬件调试丨趣味编程源码丨免费工具分享</p>
+    <p class="desc-text en">Optimization | Code | Free Resources</p>
+</section>
 
-    <section id="dy" class="wrap">
-        <h2 class="big-title" style="font-size:40px;margin-bottom:20px;">我的抖音</h2>
-        <a href="https://www.douyin.com/user/MS4wLjABAAAAyH8AJAynwyOCU70Qy0iC4RKnQKw1RdS4EFhy2ey9u7Yw9t7W4RocfqHlPuemGL8D?from_tab_name=main" target="_blank" style="font-size:22px;border:1px solid #fff;padding:8px 20px;border-radius:8px;text-decoration:none;color:#fff;">点击进入我的抖音</a>
-        <!-- ======================================================= -->
-    </section>
+<section id="service" class="fade-lux">
+    <h2 class="lux-title" style="font-size:45px;"><span class="zh">淘机服务</span><span class="en">Device Service</span></h2>
+    <p class="desc-text zh">靠谱二手手机、电脑、数码产品挑选与咨询</p>
+    <p class="wechat-text">微信：q3599396209</p>
+</section>
+
+<section id="douyin" class="fade-lux">
+    <h2 class="lux-title" style="font-size:45px;"><span class="zh">抖音主页</span><span class="en">Douyin</span></h2>
+    <a href="https://www.douyin.com/user/MS4wLjABAAAAyH8AJAynwyOCU70Qy0iC4RKnQKw1RdS4EFhy2ey9u7Yw9t7W4RocfqHlPuemGL8D?from_tab_name=main" target="_blank" class="lux-btn">
+        <span class="zh">进入抖音</span><span class="en">Go Douyin</span>
+    </a>
+</section>
+
+<section id="github" class="fade-lux">
+    <h2 class="lux-title" style="font-size:45px;"><span class="zh">GitHub仓库</span><span class="en">GitHub</span></h2>
+    <a href="https://github.com/kanluohai" target="_blank" class="lux-btn">
+        <span class="zh">查看源码</span><span class="en">View Code</span>
+    </a>
+</section>
+
+<section id="netdisk" class="fade-lux">
+    <h2 class="lux-title" style="font-size:45px;"><span class="zh">忘风的藏宝库</span><span class="en">Treasure</span></h2>
+    <a href="https://1831514778.share.123pan.cn/123pan/68t6jv-0Ptgv" target="_blank" class="lux-btn">
+        <span class="zh">打开网盘</span><span class="en">Open NetDisk</span>
+    </a>
+</section>
+
+<section id="contact" class="fade-lux">
+    <h2 class="lux-title" style="font-size:45px;"><span class="zh">联系客服</span><span class="en">Contact</span></h2>
+    <p class="desc-text zh">业务咨询、问题反馈</p>
+    <p class="wechat-text">邮箱：3599396209@qq.com</p>
+</section>
+
+<div class="back-top" id="backTop">↑</div>
+<footer>© 2026 忘风播客 All Rights Reserved</footer>
+
+<script>
+// 日夜暗黑浅色切换
+const body = document.body;
+const themeBtn = document.getElementById('themeBtn');
+themeBtn.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    themeBtn.innerText = body.classList.contains('dark') ? '🌙' : '☀️';
+});
+
+// 中英语言切换
+const langBtn = document.getElementById('langBtn');
+const zh = document.querySelectorAll('.zh');
+const en = document.querySelectorAll('.en');
+let isZh = true;
+langBtn.addEventListener('click', () => {
+    isZh = !isZh;
+    langBtn.innerText = isZh ? 'EN' : '中';
+    zh.forEach(el => el.style.display = isZh ? 'block' : 'none');
+    en.forEach(el => el.style.display = isZh ? 'none' : 'block');
+});
+
+// 滚动导航高亮 + 回到顶部显示逻辑
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.nav-glass a');
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(sec => {
+        const top = sec.offsetTop - 100;
+        if (window.scrollY >= top) cur = sec.id;
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === cur) {
+            link.classList.add('active');
+        }
+    });
+    backTop.classList.toggle('show', window.scrollY > 300);
+});
+backTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
 </body>
 </html>
